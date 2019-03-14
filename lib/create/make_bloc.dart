@@ -3,9 +3,15 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 
 class MakeVideoBloc {
+  /// Available cameras
+  List<CameraDescription> _cameras = [];
+  /// Lens direction of currently selected camera
+  CameraLensDirection _cameraLensDirection;
+  
   CameraController cameraController;
 
   StreamController<bool> _cameraInitializedStream = StreamController();
+  /// Notify then camera is initialized
   Stream<bool> get cameraInitializedStream => _cameraInitializedStream.stream;
 
   Stream<List<CameraDescription>> getAvailableCameras() {
@@ -15,6 +21,8 @@ class MakeVideoBloc {
           return [];
         })
         .then((cameras) {
+          this._cameras = cameras;
+          
           if (cameras.isNotEmpty) {
             selectCamera(cameras.first);
           }
@@ -25,6 +33,12 @@ class MakeVideoBloc {
   }
 
   selectCamera(CameraDescription cameraDescription) async {
+    _cameraLensDirection = cameraDescription.lensDirection;
+
+    if (cameraController != null) {
+      await cameraController.dispose();
+    }
+    
     cameraController = CameraController(cameraDescription, ResolutionPreset.medium);
 
     cameraController.addListener(() {
@@ -39,6 +53,15 @@ class MakeVideoBloc {
     }
 
     _cameraInitializedStream.add(true);
+  }
+
+  switchCamera() {
+    for (CameraDescription desc in _cameras) {
+      if (desc.lensDirection != _cameraLensDirection) {
+        selectCamera(desc);
+        return;
+      }
+    }
   }
 
   dispose() async {

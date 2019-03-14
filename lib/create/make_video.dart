@@ -91,7 +91,7 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
       widgets.insert(0, IconButton(
         icon: Icon(Icons.switch_camera),
         onPressed: () {
-
+          _makeVideoBloc.switchCamera();
         },
       ));
     }
