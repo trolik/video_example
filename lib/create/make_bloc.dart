@@ -7,6 +7,8 @@ class MakeVideoBloc {
   List<CameraDescription> _cameras = [];
   /// Lens direction of currently selected camera
   CameraLensDirection _cameraLensDirection;
+
+  String _videoRecPath;
   
   CameraController cameraController;
 
@@ -32,6 +34,8 @@ class MakeVideoBloc {
         .asStream();
   }
 
+  bool get isRecording => cameraController.value.isRecordingVideo;
+
   selectCamera(CameraDescription cameraDescription) async {
     _cameraLensDirection = cameraDescription.lensDirection;
 
@@ -53,6 +57,20 @@ class MakeVideoBloc {
     }
 
     _cameraInitializedStream.add(true);
+  }
+
+  Future<void> startRecording(String path) async {
+    await cameraController.startVideoRecording(path);
+
+    _videoRecPath = path;
+
+    return;
+  }
+
+  Future<String> stopRecording() async {
+    await cameraController.stopVideoRecording();
+
+    return _videoRecPath;
   }
 
   switchCamera() {
