@@ -27,6 +27,7 @@ dependencies:
   path_provider: ^0.5.0
   camera: ^0.4.2
   video_player: ^0.10.0
+  sqflite: any
 
 dev_dependencies:
   flutter_test:

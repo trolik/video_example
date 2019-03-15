@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_example/db/entities.dart';
+import 'package:video_example/db/repository.dart';
 
 class MakeVideoBloc {
   /// Available cameras
@@ -92,6 +94,15 @@ class MakeVideoBloc {
     await cameraController.stopVideoRecording();
 
     return _videoRecPath;
+  }
+
+  Future<bool> save(String videoPath) async {
+    Video video = Video(videoPath: videoPath, thumbPath: "dumb", duration: 30);
+    var result = await Repository.instance.addVideo(video);
+
+    print("insert: $result");
+
+    return true;
   }
 
   switchCamera() {

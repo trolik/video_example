@@ -58,6 +58,7 @@ class _CameraControlsState extends State<CameraControls> {
     try {
       var videoPath = await makeVideoBloc.stopRecording();
       if (videoPath != null) {
+        makeVideoBloc.save(videoPath);
         setState(() {});
         showSnackBar('Video recorded to: $videoPath');
       }
