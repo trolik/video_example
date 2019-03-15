@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:video_example/create/make_bloc.dart';
-import 'package:video_example/create/make_bloc_provider.dart';
+import 'package:video_example/create/bloc/make_bloc.dart';
+import 'package:video_example/create/widget/make_bloc_provider.dart';
 
 class CameraControls extends StatefulWidget {
   final List<CameraDescription> cameras;

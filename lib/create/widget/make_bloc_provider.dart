@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:video_example/create/make_bloc.dart';
+import 'package:video_example/create/bloc/make_bloc.dart';
 
 class MakeVideoBlocProvider extends StatefulWidget {
   final MakeVideoBloc bloc;
