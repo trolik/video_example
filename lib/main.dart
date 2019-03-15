@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_example/create/make_video.dart';
 import 'package:video_example/db/repository.dart';
 import 'package:video_example/home/home_screen.dart';
+import 'package:video_example/share/share_video.dart';
 import 'package:video_example/utils/routes.dart';
 
 void main() {
@@ -20,10 +21,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        Routes.home: (context) {
-          return HomeScreen();
-        },
-        Routes.makeVideo: (context) => MakeVideoScreen()
+        Routes.home: (context) => HomeScreen(),
+        Routes.makeVideo: (context) => MakeVideoScreen(),
+        //Routes.share: (context) => ShareScreen()
       },
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
     );

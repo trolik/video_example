@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:video_example/db/entities.dart';
+import 'package:video_example/share/share_video.dart';
+import 'package:video_example/utils/routes.dart';
 
 class VideoRow extends StatefulWidget {
   final Video video;
@@ -27,9 +29,10 @@ class _VideoRowState extends State<VideoRow> {
                 child: _buildListTile()
               )
           ),
-          onTap: () {
-
-          },
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ShareScreen(widget.video))
+          ),
         )
     );
   }
