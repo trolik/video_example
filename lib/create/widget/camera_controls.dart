@@ -56,11 +56,11 @@ class _CameraControlsState extends State<CameraControls> {
 
   stopVideoRecording() async {
     try {
-      var videoPath = await makeVideoBloc.stopRecording();
-      if (videoPath != null) {
-        makeVideoBloc.save(videoPath);
+      var videoMetaInfo = await makeVideoBloc.stopRecording();
+      if (videoMetaInfo != null) {
+        makeVideoBloc.save(videoMetaInfo);
         setState(() {});
-        showSnackBar('Video recorded to: $videoPath');
+        showSnackBar('Video recorded to: ${videoMetaInfo}');
       }
     } on CameraException catch (e) {
       print(e);

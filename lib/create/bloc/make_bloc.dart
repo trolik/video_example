@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_example/db/entities.dart';
 import 'package:video_example/db/repository.dart';
+import 'package:thumbnails/thumbnails.dart';
 
 class MakeVideoBloc {
   /// Available cameras
@@ -13,6 +15,7 @@ class MakeVideoBloc {
   CameraLensDirection _cameraLensDirection;
 
   String _videoRecPath;
+  DateTime _startRecording;
   
   CameraController cameraController;
 
@@ -66,12 +69,8 @@ class MakeVideoBloc {
   String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<bool> startRecording() async {
-    Directory docsDir = await getApplicationDocumentsDirectory();
-    String dirPath = "${docsDir.path}/Videos";
-
-    await Directory(dirPath).create();
-
-    String videoPath = "$dirPath/${_timestamp()}.mp4";
+    await Directory(await _getVideosDirectoryPath()).create();
+    String videoPath = "$_getVideosDirectoryPath/${_timestamp()}.mp4";
 
     if (isRecording) {
       print("ERROR: already recording");
@@ -80,12 +79,13 @@ class MakeVideoBloc {
 
     await cameraController.startVideoRecording(videoPath);
 
+    _startRecording = DateTime.now();
     _videoRecPath = videoPath;
 
     return true;
   }
 
-  Future<String> stopRecording() async {
+  Future<VideoRecordMetaInformation> stopRecording() async {
     if (!isRecording) {
       print("ERROR: not recording");
       return null;
@@ -93,11 +93,21 @@ class MakeVideoBloc {
 
     await cameraController.stopVideoRecording();
 
-    return _videoRecPath;
+    var duration = DateTime.now().difference(_startRecording);
+
+    return VideoRecordMetaInformation(_videoRecPath, _startRecording, duration.inSeconds);
   }
 
-  Future<bool> save(String videoPath) async {
-    Video video = Video(videoPath: videoPath, thumbPath: "dumb", duration: 30);
+  _getVideosDirectoryPath() async {
+    Directory docsDir = await getApplicationDocumentsDirectory();
+    return join(docsDir.path, "Videos");
+  }
+
+  Future<bool> save(VideoRecordMetaInformation metaInformation) async {
+    var thumbPath = await Thumbnails.getThumbnail(videoFile: metaInformation.path, thumbnailFolder: _getVideosDirectoryPath(), quality: 30, imageType: ThumbFormat.PNG);
+    print("thumb: $thumbPath");
+
+    Video video = Video(videoPath: metaInformation.path, thumbPath: thumbPath, duration: metaInformation.duration, date: metaInformation.date);
     var result = await Repository.instance.addVideo(video);
 
     print("insert: $result");
@@ -116,5 +126,18 @@ class MakeVideoBloc {
 
   dispose() async {
     await cameraController?.dispose();
+  }
+}
+
+class VideoRecordMetaInformation {
+  final String path;
+  final DateTime date;
+  final int duration;
+
+  VideoRecordMetaInformation(this.path, this.date, this.duration);
+
+  @override
+  String toString() {
+    return "{path: $path, date: $date, duration: $duration}";
   }
 }

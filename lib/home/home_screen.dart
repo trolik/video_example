@@ -53,10 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildVideosList(List<Video> videos) {
-    return ListView.builder(
-        itemCount: videos.length,
-        itemBuilder: (context, index) {
-          return VideoRow(videos.elementAt(index));
-        });
+    if (videos.length == 0) {
+      return Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("No videos found", style: TextStyle(fontSize: 30)),
+          Text("Tap + button to create video", style: TextStyle(fontSize: 16))
+        ],
+      ));
+    } else {
+      return ListView.builder(
+          itemCount: videos.length,
+          itemBuilder: (context, index) {
+            return VideoRow(videos.elementAt(index));
+          });
+    }
   }
 }

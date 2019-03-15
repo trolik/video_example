@@ -19,17 +19,20 @@ class Repository {
     _database = await openDatabase(dbPath,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute("CREATE TABLE VIDEO (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, video_path TEXT, thumb_path TEXT, duration INTEGER)");
+        await db.execute("CREATE TABLE ${Tables.video} (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, video_path TEXT, thumb_path TEXT, date INTEGER, duration INTEGER)");
       });
   }
 
   Future<int> addVideo(Video video) async {
-    return await _database.insert("VIDEO", video.toJson());
+    return await _database.insert(Tables.video, video.toJson());
   }
 
   Future<List<Video>> getVideos() async {
-    var qresults = await _database.query("VIDEO", columns: ["id", "video_path", "thumb_path", "duration"]);
-    var results = qresults.map((map) { return Video.fromJson(map); }).toList();
-    return results;
+    var results = await _database.query(Tables.video);
+    return results.map((map) => Video.fromJson(map)).toList();
   }
+}
+
+class Tables {
+  static final String video = "VIDEO";
 }
