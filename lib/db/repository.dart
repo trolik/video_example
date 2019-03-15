@@ -19,7 +19,7 @@ class Repository {
     _database = await openDatabase(dbPath,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute("CREATE TABLE ${Tables.video} (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, video_path TEXT, thumb_path TEXT, date INTEGER, duration INTEGER)");
+        await db.execute("CREATE TABLE ${Tables.video} (${VideoColumn.id} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ${VideoColumn.videoPath} TEXT, ${VideoColumn.thumbPath} TEXT, ${VideoColumn.date} INTEGER, ${VideoColumn.duration} INTEGER)");
       });
   }
 
@@ -28,7 +28,7 @@ class Repository {
   }
 
   Future<List<Video>> getVideos() async {
-    var results = await _database.query(Tables.video);
+    var results = await _database.query(Tables.video, orderBy: VideoColumn.date + " DESC");
     return results.map((map) => Video.fromJson(map)).toList();
   }
 }
