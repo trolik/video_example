@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MakeVideoBloc {
   /// Available cameras
@@ -59,15 +61,34 @@ class MakeVideoBloc {
     _cameraInitializedStream.add(true);
   }
 
-  Future<void> startRecording(String path) async {
-    await cameraController.startVideoRecording(path);
+  String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
-    _videoRecPath = path;
+  Future<bool> startRecording() async {
+    Directory docsDir = await getApplicationDocumentsDirectory();
+    String dirPath = "${docsDir.path}/Videos";
 
-    return;
+    await Directory(dirPath).create();
+
+    String videoPath = "$dirPath/${_timestamp()}.mp4";
+
+    if (isRecording) {
+      print("ERROR: already recording");
+      return false;
+    }
+
+    await cameraController.startVideoRecording(videoPath);
+
+    _videoRecPath = videoPath;
+
+    return true;
   }
 
   Future<String> stopRecording() async {
+    if (!isRecording) {
+      print("ERROR: not recording");
+      return null;
+    }
+
     await cameraController.stopVideoRecording();
 
     return _videoRecPath;
