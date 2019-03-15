@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:video_example/create/make_bloc.dart';
+import 'package:video_example/create/make_bloc_provider.dart';
+import 'package:video_example/create/widget/camera_controls.dart';
 
 class MakeVideoScreen extends StatefulWidget {
   @override
@@ -20,8 +22,15 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return MakeVideoBlocProvider(
+      bloc: _makeVideoBloc,
+      child: _buildScaffold(),
+    );
+  }
+
+  Scaffold _buildScaffold() {
     return Scaffold(
-      key: _scaffoldKey,
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Create you own video"),
         ),
@@ -46,7 +55,7 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
               child: _buildCameraPreview(),
             ),
           ),
-          _buildControls(cameras)
+          CameraControls(cameras)
         ],
       );
     } else if (snapshot.hasError) {
@@ -73,57 +82,6 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
         }
       },
     );
-  }
-
-  Widget _buildControls(List<CameraDescription> cameras) {
-
-    var widgets = <Widget>[
-      IconButton(
-        icon: Icon(Icons.camera,
-          color: _makeVideoBloc.isRecording ? Colors.red : Colors.black,
-        ),
-        onPressed: () => _makeVideoBloc.isRecording ? stopVideoRecording() : startVideoRecording(),
-      )
-    ];
-
-    if (cameras.length > 1) {
-      widgets.insert(0, IconButton(
-        icon: Icon(Icons.switch_camera),
-        onPressed: () => _makeVideoBloc.switchCamera(),
-      ));
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: widgets,
-    );
-  }
-
-  startVideoRecording() async {
-    try {
-      bool recording = await _makeVideoBloc.startRecording();
-      if (recording) {
-
-      }
-    } on CameraException catch (e) {
-      print(e);
-      showSnackBar(e.description);
-    }
-  }
-
-  stopVideoRecording() async {
-    //setState(() {});
-
-    try {
-      var videoPath = await _makeVideoBloc.stopRecording();
-      if (videoPath != null) {
-        showSnackBar('Video recorded to: $videoPath');
-      }
-    } on CameraException catch (e) {
-      print(e);
-      showSnackBar(e.description);
-    }
   }
 
   void showSnackBar(String message) {
