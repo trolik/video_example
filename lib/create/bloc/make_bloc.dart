@@ -69,8 +69,8 @@ class MakeVideoBloc {
   String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<bool> startRecording() async {
-    await Directory(await _getVideosDirectoryPath()).create();
-    String videoPath = "$_getVideosDirectoryPath/${_timestamp()}.mp4";
+    Directory dir = await Directory(await _getVideosDirectoryPath()).create();
+    String videoPath = "${dir.path}/${_timestamp()}.mp4";
 
     if (isRecording) {
       print("ERROR: already recording");
@@ -104,7 +104,7 @@ class MakeVideoBloc {
   }
 
   Future<bool> save(VideoRecordMetaInformation metaInformation) async {
-    var thumbPath = await Thumbnails.getThumbnail(videoFile: metaInformation.path, thumbnailFolder: _getVideosDirectoryPath(), quality: 30, imageType: ThumbFormat.PNG);
+    var thumbPath = await Thumbnails.getThumbnail(videoFile: metaInformation.path, thumbnailFolder: await _getVideosDirectoryPath(), quality: 30, imageType: ThumbFormat.PNG);
     print("thumb: $thumbPath");
 
     Video video = Video(videoPath: metaInformation.path, thumbPath: thumbPath, duration: metaInformation.duration, date: metaInformation.date);
