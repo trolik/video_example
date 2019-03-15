@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: Icon(Icons.video_library),
           title: Text("Video maker"),
         ),
         body: _buildBody(),
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             var result = Navigator.of(context).pushNamed(Routes.makeVideo);
           },
           tooltip: 'Increment',
-          child: Icon(Icons.add),
+          child: Icon(Icons.videocam),
         )
     );
   }

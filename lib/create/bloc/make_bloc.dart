@@ -100,7 +100,18 @@ class MakeVideoBloc {
 
   _getVideosDirectoryPath() async {
     Directory docsDir = await getApplicationDocumentsDirectory();
-    return join(docsDir.path, "Videos");
+
+    /// docsDir has suffix "app_flutter" and exist on the same directory level as "files",
+    /// so it is hard to open this folder via file provider, so lets replace: "app_flutter" -> "files"
+    /// More info in PathUtils.getDataDirectory
+    String docsDirPath = docsDir.path;
+    if (docsDirPath.endsWith("app_flutter")) {
+      docsDirPath = docsDirPath.replaceAll("app_flutter", "files");
+
+      print("_getVideosDirectoryPath replaced: $docsDirPath");
+    }
+
+    return join(docsDirPath, "Videos");
   }
 
   Future<bool> save(VideoRecordMetaInformation metaInformation) async {

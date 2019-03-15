@@ -31,7 +31,7 @@ class _ShareScreenState extends State<ShareScreen> {
 
   shareIt() async {
     try {
-      await shareMethodChannel.invokeMethod("share", {"text": "Hello, world!"});
+      await shareMethodChannel.invokeMethod("share", {"path": widget.video.videoPath});
     } on PlatformException catch (e) {
       print(e);
     }
