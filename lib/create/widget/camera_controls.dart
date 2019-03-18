@@ -21,7 +21,8 @@ class _CameraControlsState extends State<CameraControls> {
 
     var widgets = <Widget>[
       IconButton(
-        icon: Icon(Icons.camera,
+        icon: Icon(
+          Icons.camera,
           color: makeVideoBloc.isRecording ? Colors.red : Colors.black,
         ),
         onPressed: () => makeVideoBloc.isRecording ? stopVideoRecording() : startVideoRecording(),
@@ -30,8 +31,11 @@ class _CameraControlsState extends State<CameraControls> {
 
     if (widget.cameras.length > 1) {
       widgets.insert(0, IconButton(
-        icon: Icon(Icons.switch_camera),
-        onPressed: () => makeVideoBloc.switchCamera(),
+        icon: Icon(
+            Icons.switch_camera,
+            color: makeVideoBloc.isRecording ? Colors.grey : Colors.black
+        ),
+        onPressed: () => makeVideoBloc.isRecording ? {} : makeVideoBloc.switchCamera(),
       ));
     }
 
