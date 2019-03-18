@@ -12,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeBloc _homeBloc;
 
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             var result = Navigator.of(context).pushNamed(Routes.makeVideo);
           },
-          tooltip: 'Increment',
+          tooltip: 'Make video',
           child: Icon(Icons.videocam),
         )
     );
