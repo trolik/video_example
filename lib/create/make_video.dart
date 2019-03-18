@@ -47,41 +47,12 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
     if (snapshot.hasData) {
       var cameras = snapshot.data;
 
-      return Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(color: Colors.red),
-              child: _buildCameraPreview(),
-            ),
-          ),
-          CameraControls(cameras)
-        ],
-      );
+      return _buildCameraWidgets(cameras);
     } else if (snapshot.hasError) {
       return Center(child: Text(snapshot.error));
     } else {
       return Center(child: CircularProgressIndicator());
     }
-  }
-
-  Widget _buildCameraPreview() {
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: _makeVideoBloc.cameraInitializedStream,
-      builder: (context, snapshot) {
-        var initialized = snapshot.data;
-
-        if (initialized) {
-          return AspectRatio(
-            aspectRatio: _makeVideoBloc.cameraController.value.aspectRatio,
-            child: CameraPreview(_makeVideoBloc.cameraController),
-          );
-        } else {
-          return Container(width: 0, height: 0);
-        }
-      },
-    );
   }
 
   void showSnackBar(String message) {
@@ -90,6 +61,36 @@ class _MakeVideoScreenState extends State<MakeVideoScreen> {
           content: Text(message),
           duration: Duration(seconds: 2)
       ),
+    );
+  }
+
+  Widget _buildCameraWidgets(List<CameraDescription> cameras) {
+    return StreamBuilder<bool>(
+      stream: _makeVideoBloc.cameraInitializedStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var initialized = snapshot.data;
+
+          if (initialized) {
+            return Column(children: <Widget>[
+              AspectRatio(
+                aspectRatio: _makeVideoBloc.cameraController.value.aspectRatio,
+                child: CameraPreview(_makeVideoBloc.cameraController),
+              ),
+              CameraControls(cameras)
+            ]);
+          } else {
+            return Center(
+                child: Text(
+                    "Permissions weren't granted or initialization failed",
+                    style: TextStyle(fontSize: 20)
+                )
+            );
+          }
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      }
     );
   }
 }

@@ -58,12 +58,13 @@ class MakeVideoBloc {
 
     try {
       await cameraController.initialize();
+
+      _cameraInitializedStream.add(true);
     } on CameraException catch (e) {
       print(e);
-      _cameraInitializedStream.add(true);
-    }
 
-    _cameraInitializedStream.add(true);
+      _cameraInitializedStream.add(false);
+    }
   }
 
   String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
