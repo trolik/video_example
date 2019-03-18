@@ -21,17 +21,37 @@ class _ShareScreenState extends State<ShareScreen> {
           title: Text("Share video"),
         ),
         body: Center(
-            child: RaisedButton(
-                child: Text("share"),
-                onPressed: () => shareIt()
-            )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildShareButton(),
+                RaisedButton(
+                    child: Text("trim"),
+                    onPressed: () => trim()
+                )
+              ],)
         )
+    );
+  }
+
+  RaisedButton _buildShareButton() {
+    return RaisedButton(
+        child: Text("share"),
+        onPressed: () => shareIt()
     );
   }
 
   shareIt() async {
     try {
       await shareMethodChannel.invokeMethod("share", {"path": widget.video.videoPath});
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  trim() async {
+    try {
+      await shareMethodChannel.invokeMethod("trim", {"path": widget.video.videoPath});
     } on PlatformException catch (e) {
       print(e);
     }

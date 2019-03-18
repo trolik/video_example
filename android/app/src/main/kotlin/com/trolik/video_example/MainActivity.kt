@@ -6,7 +6,10 @@ import android.support.v4.content.FileProvider
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
+import life.knowledge4.videotrimmer.utils.FileUtils
 import java.io.File
+
+
 
 class MainActivity: FlutterActivity() {
   private val CHANNEL = "samples.flutter.io/share_file"
@@ -26,10 +29,28 @@ class MainActivity: FlutterActivity() {
         share(path!!)
 
         result.success(true)
+      } else if (call.method == "trim") {
+        if (call.arguments !is Map<*, *>) {
+          throw IllegalArgumentException("Map argument expected")
+        }
+
+        val path = call.argument<String>("path")
+        trimVideo(path!!)
+
+        result.success(true)
       } else {
         result.notImplemented()
       }
     }
+  }
+
+  private fun trimVideo(path: String) {
+    val video = File(path)
+    val uri = FileProvider.getUriForFile(this, "com.trolik.video_example.fileProvider", video)
+
+    val intent = Intent(this, TrimmerActivity::class.java)
+    intent.putExtra(EXTRA_VIDEO_PATH, FileUtils.getPath(this, uri))
+    startActivity(intent)
   }
 
   private fun share(path: String) {
@@ -48,5 +69,10 @@ class MainActivity: FlutterActivity() {
 
     val chooserIntent = Intent.createChooser(shareIntent, null)
     startActivity(chooserIntent)
+  }
+
+  companion object {
+      @JvmField
+      val EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH"
   }
 }
