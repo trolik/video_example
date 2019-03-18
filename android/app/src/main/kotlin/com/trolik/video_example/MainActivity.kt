@@ -6,7 +6,6 @@ import android.support.v4.content.FileProvider
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
-import life.knowledge4.videotrimmer.utils.FileUtils
 import java.io.File
 
 
@@ -49,7 +48,7 @@ class MainActivity: FlutterActivity() {
     val uri = FileProvider.getUriForFile(this, "com.trolik.video_example.fileProvider", video)
 
     val intent = Intent(this, TrimmerActivity::class.java)
-    intent.putExtra(EXTRA_VIDEO_PATH, FileUtils.getPath(this, uri))
+    intent.putExtra(EXTRA_VIDEO_PATH, video.path)
     startActivity(intent)
   }
 

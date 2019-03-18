@@ -1,17 +1,17 @@
 package com.trolik.video_example;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import life.knowledge4.videotrimmer.K4LVideoTrimmer;
 import life.knowledge4.videotrimmer.interfaces.OnK4LVideoListener;
 import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 
-public class TrimmerActivity extends AppCompatActivity implements OnTrimVideoListener, OnK4LVideoListener {
+public class TrimmerActivity extends Activity implements OnTrimVideoListener, OnK4LVideoListener {
 
     private K4LVideoTrimmer mVideoTrimmer;
     private ProgressDialog mProgressDialog;

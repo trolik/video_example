@@ -5,6 +5,9 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="video_example"
@@ -28,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="com.trolik.video_example.TrimmerActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
