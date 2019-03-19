@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_example/db/entities.dart';
 import 'package:video_example/share/share_video.dart';
 
-class extends StatefulWidget {
+class VideoRow extends StatefulWidget {
   final Video video;
 
   VideoRow(this.video);
